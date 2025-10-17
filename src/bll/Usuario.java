@@ -191,6 +191,10 @@ public class Usuario {
 		return DtoUsuario.mostrarUsuarios();
 	}
 	
+	public static Usuario UltimoUsuario(){
+		return DtoUsuario.mostrarUsuarios().getLast();
+	}
+	
 	public static void verListadoUsuarios() { 
 	    List<Usuario> listaUsuarios = mostrarUsuarios(); 
 	    

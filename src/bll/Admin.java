@@ -28,6 +28,7 @@ public class Admin extends Usuario {
         String[] opcionesMenu = {
             "Gestionar usuarios",          
             "Gestionar ObraSocial",
+            "Agregar recepcionista",
             "Cerrar Sesión"             
         };
         
@@ -56,7 +57,7 @@ public class Admin extends Usuario {
 							break;
 							
 						case "Ver Usuarios":
-							Usuario.verListadoUsuarios();
+							Usuario.UltimoUsuario();
 							break;
 						} //Fin del submenu              			
                     break;
@@ -84,9 +85,13 @@ public class Admin extends Usuario {
                 	
                     break;
                 case 2:
+                	Recepcionista.agregarRecepcionista();
+                    break;
+                    
+                case 3:
                 	JOptionPane.showMessageDialog(null, "Cerrando sesión...");
                     break;
                                           }
-        } while (opcionSeleccionada != 2);
+        } while (opcionSeleccionada != 3);
     }
 }

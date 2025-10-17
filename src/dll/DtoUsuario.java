@@ -151,7 +151,7 @@ public class DtoUsuario {
             statement.setString(2, usuario.getApellido()); 
             statement.setString(3, usuario.getDni());      
             statement.setString(4, usuario.getMail());     
-            statement.setString(5, Encriptador.encriptar(usuario.getContrasenia())); // Encriptar
+            statement.setString(5, Encriptador.encriptar(usuario.getContrasenia())); 
             statement.setString(6, usuario.getTipo());
 
             int filas = statement.executeUpdate();
