@@ -99,7 +99,7 @@ public class DtoObraSocial {
 	 public static boolean EditarObraSocial(ObraSocial obraSocial) {
 	        try {
 	        	PreparedStatement statement = con.prepareStatement(
-	        			"UPDATE obrasocial SET nombre = ?, descuento = ? WHERE id = ?"	            			);
+	        			"UPDATE obrasocial SET nombre = ?, descuento = ? WHERE id = ?");
 	            			statement.setString(1, obraSocial.getNombre());
 	            			statement.setDouble(2, obraSocial.getDescuento());	            			
 	            			statement.setInt(3, obraSocial.getId());

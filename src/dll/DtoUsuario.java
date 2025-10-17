@@ -48,9 +48,7 @@ public class DtoUsuario {
 	    return usuario;
 	}
 
-	// ----------------------------------------------------
-	// BUSCAR POR ID (Adaptado y corregido)
-	// ----------------------------------------------------
+	
 	public static Usuario buscarPorId() {
 		int id = 0;
 		
@@ -120,9 +118,7 @@ public class DtoUsuario {
         return false;
     }
 
-    // ----------------------------------------------------
-    // ELIMINAR USUARIO (por ID, estilo profesor)
-    // ----------------------------------------------------
+    
     public static void EliminarUsuario(int id) {
         try {
             PreparedStatement statement = con.prepareStatement(
@@ -173,9 +169,7 @@ public class DtoUsuario {
         return false;
     }
 
-    // ----------------------------------------------------
-    // MOSTRAR TODOS (Adaptado a tus 5 campos)
-    // ----------------------------------------------------
+    
     public static LinkedList<Usuario> mostrarUsuarios() {
         LinkedList<Usuario> usuarios = new LinkedList<Usuario>();
         try {
@@ -185,9 +179,9 @@ public class DtoUsuario {
             while (rs.next()) {
                 int id = rs.getInt("id");
                 String nombre = rs.getString("nombre");
-                String apellido = rs.getString("apellido"); // Tu campo
+                String apellido = rs.getString("apellido"); 
                 String mail = rs.getString("mail");
-                String contrasenia = rs.getString("contrasenia"); // Tu campo
+                String contrasenia = rs.getString("contrasenia");
                 String dni = rs.getString("dni");
                 String tipo = rs.getString("tipo");
 
