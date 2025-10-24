@@ -22,7 +22,8 @@ public class ObraSocial {
 	}
 
 	public ObraSocial(String nombre, double descuento) {
-		// TODO Auto-generated constructor stub
+		this.nombre = nombre;
+		this.descuento = descuento;
 	}
 
 	public int getId() {
@@ -55,26 +56,12 @@ public class ObraSocial {
 	}
 	
 	public static boolean agregarObraSocial() {
-        String nombre = Validaciones.ValidarString("Ingrese nombre de la Obra Social");
-        if (nombre == null) return false;
-
-        String descuentoStr;
-        double descuento;
-
-        try {
-            descuentoStr = Validaciones.ValidarString("Ingrese el descuento");
-            if (descuentoStr == null) return false;
-            
-            descuento = Double.parseDouble(descuentoStr);
-            
-        } catch (NumberFormatException e) {
-            JOptionPane.showMessageDialog(null, "Error: El descuento debe ser un valor numérico válido.");
-            return false;
-        }
+        String nombre = Validaciones.ValidarString("Ingrese nombre de la Obra Social");     
+        double descuento =Double.parseDouble(JOptionPane.showInputDialog("Ingrese el descuento"));
 
         ObraSocial nuevaObraSocial = new ObraSocial(nombre, descuento);
-
-        return DtoObraSocial.agregarObraSocial(nuevaObraSocial);
+         DtoObraSocial.agregarObraSocial(nombre,descuento );
+         return true;
     }
 	
 	public static LinkedList<ObraSocial> mostrarObraSociales(){

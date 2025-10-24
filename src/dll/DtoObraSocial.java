@@ -18,30 +18,25 @@ public class DtoObraSocial {
 
 	
 	
-	 public static boolean agregarObraSocial(ObraSocial obraSocial) {
+	 public static boolean agregarObraSocial(String nombre, double descuento ) {
 	        try {
 	            PreparedStatement statement = con.prepareStatement(
 	                "INSERT INTO obrasocial (nombre, descuento) VALUES (?, ?)"
 	            );
-	            statement.setString(1, obraSocial.getNombre());
-	            statement.setDouble(2, obraSocial.getDescuento()); 
+	            statement.setString(1, nombre);
+	            statement.setDouble(2, descuento); 
 
 	            int filas = statement.executeUpdate();
-	            
 	            if (filas > 0) {
-	                JOptionPane.showMessageDialog(null, "Obra Social '" + obraSocial.getNombre() + "' agregada correctamente.");
+	                System.out.println("Especialidad agregada correctamente.");
 	                return true;
 	            }
-	        } catch (MySQLIntegrityConstraintViolationException e) {
-	            JOptionPane.showMessageDialog(null, "Error: Ya existe una Obra Social con el nombre " + obraSocial.getNombre());
-	            return false;
 	        } catch (Exception e) {
-	            JOptionPane.showMessageDialog(null, "Error al guardar Obra Social: " + e.getMessage());
-	            e.printStackTrace();
+	            JOptionPane.showMessageDialog(null, "La especialidad ya se encuentra registrada.");
 	            return false;
 	        }
 	        return false;
-	    }
+	}
 	 
 	 public static LinkedList<ObraSocial> mostrarObraSociales() {
 	        LinkedList<ObraSocial> obraSocial = new LinkedList<ObraSocial>();

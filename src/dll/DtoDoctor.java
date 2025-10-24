@@ -10,6 +10,7 @@ import javax.swing.JOptionPane;
 import com.mysql.jdbc.exceptions.jdbc4.MySQLIntegrityConstraintViolationException;
 
 import bll.Doctor;
+import bll.Especialidad;
 import bll.Usuario;
 
 public class DtoDoctor {
@@ -40,9 +41,9 @@ public class DtoDoctor {
 //    public static boolean agregarNuevaEspecialidad() {
 //        try {
 //            PreparedStatement stmt = con.prepareStatement(
-//                "UPDATE doctor SET especialidad = ? WHERE usuario_id = ?"
+//                    "INSERT INTO especialidad (nombre) VALUES (?)"
 //            );
-//            stmt.setString(1, Doctor.get);
+//            stmt.setString(1, Especialidad.);
 //            stmt.setInt(2, doctorId);
 //
 //            int filasAfectadas = stmt.executeUpdate();
@@ -60,11 +61,14 @@ public class DtoDoctor {
 //        }
 //    }
     
-    public static boolean agregarDoctor() {
+    public static boolean agregarDoctor(int id, int obraSocialId) {
         try {             	
             PreparedStatement statement = con.prepareStatement(
-            		"INSERT INTO `doctor` (usuario_id) VALUES (?)");
-            statement.setInt(1, Usuario.UltimoUsuario().getId());
+            		"INSERT INTO `doctor`( `especialidad_id`, `usuario_id`, `obrasocial_id` ) VALUES (?,?,?)");
+            statement.setInt(1, id);
+            statement.setInt(2, Usuario.UltimoUsuario().getId());
+            statement.setInt(3, obraSocialId);
+
             
             int filas = statement.executeUpdate();
             if (filas > 0) {
