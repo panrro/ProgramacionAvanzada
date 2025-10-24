@@ -97,6 +97,8 @@ public class ObraSocial {
 	    JOptionPane.showMessageDialog(null, sb.toString());
 	}
 	
+	
+	
 		public static boolean EditarObraSocial() {
 		
 		ObraSocial encontrado = DtoObraSocial.buscarPorId();

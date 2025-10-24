@@ -39,12 +39,16 @@ public class Admin extends Usuario {
 
             switch (opcionSeleccionada) {
                 case 0:
-                		String[] opcionesDesplegable = {"Agregar Usuario", "Eliminar Usuario", "Editar Usuario", "Ver Usuarios"};
+                		String[] opcionesDesplegable = {"Agregar Recepcionista", "Agregar Doctor", "Eliminar Usuario", "Editar Usuario", "Ver Usuarios"};
                 		String elegida = (String) JOptionPane.showInputDialog(null, "Ingrese opcion", "", 0, null, 						opcionesDesplegable,opcionesDesplegable[0]);
                 		
                 		switch (elegida) {
-						case "Agregar Usuario":
-							Usuario.agregarUsuario();
+						case "Agregar Recepcionista":
+							Recepcionista.agregarRecepcionista();
+							break;
+							
+						case "Agregar Doctor":
+							Doctor.agregarDoctor();
 							break;
 
 						case "Eliminar Usuario":
@@ -57,14 +61,14 @@ public class Admin extends Usuario {
 							break;
 							
 						case "Ver Usuarios":
-							Usuario.UltimoUsuario();
+							Usuario.verListadoUsuarios();
 							break;
 						} //Fin del submenu              			
                     break;
                 case 1:
 
             		String[] opciones2 = {"Agregar obraSocial", "Eliminar ObraSocial", "Editar ObraSocial", "Ver ObrasSociales"};
-            		String elegida2 = (String) JOptionPane.showInputDialog(null, "Ingrese opcion", "", 0, null, 						opciones2,opciones2[0]);
+            		String elegida2 = (String) JOptionPane.showInputDialog(null, "Ingrese opcion", "", 0, null, 					opciones2,opciones2[0]);
                 	switch (elegida2) {
 					case "Agregar obraSocial":
 						ObraSocial.agregarObraSocial();
@@ -85,7 +89,7 @@ public class Admin extends Usuario {
                 	
                     break;
                 case 2:
-                	Recepcionista.agregarRecepcionista();
+                	
                     break;
                     
                 case 3:

@@ -88,11 +88,7 @@ public class DtoUsuario {
 	}
 	
 	
-    // ... (buscarPorIDConFiltro adaptado de forma similar) ...
-
-    // ----------------------------------------------------
-    // EDITAR USUARIO (Adaptado a tus 5 campos: apellido, dni)
-    // ----------------------------------------------------
+  
     public static boolean EditarUsuario(Usuario usuario) {
         try {
         	PreparedStatement statement = con.prepareStatement(
@@ -139,9 +135,7 @@ public class DtoUsuario {
         }
     }
     
-    // ----------------------------------------------------
-    // AGREGAR USUARIO (Adaptado a tus 5 campos)
-    // ----------------------------------------------------
+
     public static boolean agregarUsuario(Usuario usuario) {
         try {
             PreparedStatement statement = con.prepareStatement(

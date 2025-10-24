@@ -21,8 +21,7 @@ public class DtoRecepcionista {
 	
 	public static boolean agregarRecepcionista() {
         try {
-        	
-        	
+        	       	
             PreparedStatement statement = con.prepareStatement(
             		"INSERT INTO `recepcionista`(usuario_id) VALUES (?) ");
             statement.setInt(1, Usuario.UltimoUsuario().getId());
