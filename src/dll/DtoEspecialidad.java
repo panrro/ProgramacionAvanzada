@@ -23,7 +23,7 @@ public class DtoEspecialidad {
 	            
 	            int filas = stmt.executeUpdate();
 	            if (filas > 0) {
-	                System.out.println("Especialidad agregadad correctamente.");
+	                System.out.println("Especialidad agregada correctamente.");
 	                return true;
 	            }
 	        } catch (Exception e) {

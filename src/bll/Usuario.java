@@ -56,6 +56,10 @@ public class Usuario {
 	    this.mail = mail;
 	    this.dni = dni;
 	}
+	
+	public Usuario() {
+	   
+	}
 
 	
 	
@@ -127,7 +131,7 @@ public class Usuario {
     }
 
 
-	public static Usuario login() {
+	public static Doctor login() {
 	    String mail, contrasenia;
 	    
 	        mail = JOptionPane.showInputDialog("Ingrese mail");
@@ -137,6 +141,19 @@ public class Usuario {
 				return null;
 			} else {
 				return DtoUsuario.login(mail, contrasenia);
+			}
+		}
+	
+	public static Recepcionista loginRecepcionista() {
+	    String mail, contrasenia;
+	    
+	        mail = JOptionPane.showInputDialog("Ingrese mail");
+	        contrasenia = JOptionPane.showInputDialog("Ingrese contraseña");
+	        if (mail.isEmpty() || contrasenia.isEmpty()) {
+				JOptionPane.showMessageDialog(null, "Error al ingrear datos");
+				return null;
+			} else {
+				return DtoUsuario.loginRecepcionista(mail, contrasenia);
 			}
 		}
 	

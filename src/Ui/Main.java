@@ -1,47 +1,61 @@
 package Ui;
+
 import javax.swing.JOptionPane;
 
 import bll.Admin;
 import bll.Doctor;
+import bll.Recepcionista;
 import bll.Usuario;
 import dll.Conexion;
 
 public class Main {
 
-    public static void main(String[] args) {
-        Conexion.getInstance();
-        
-        Usuario Admin = new Admin ("Franco", "Colotta", "franco@gmail.com", "47297832");
-        
-        String[] opciones = { "Menu Admin", "Acceder como Doctor", "Acceder Recepcionista", "Salir" };
-		
-		int opcion;
-		do {
-			opcion = JOptionPane.showOptionDialog(null, "elija opción", null, 0, 0, null, opciones, opciones);
-			switch (opcion) {
-			case 0:
-				Admin.menu();
-				break;
-			case 1:
-				Usuario encontrado = Doctor.login();
-				if (encontrado != null) {
-				    encontrado.menu(); 
+	public static void main(String[] args) {
+		// TODO Auto-generated method stub
+
+		 Conexion.getInstance();
+	        
+		 Admin Admin = new Admin ("Franco", "Colotta", "franco@gmail.com", "47297832");
+		 Doctor Doctor = new Doctor (null, null, null, null, null, null);
+		 Recepcionista Recepcionista = new Recepcionista ( null, null, null, null, null, null);
+
+
+	        
+	        String[] opciones = { "Menu Admin", "Acceder como Doctor", "Acceder Recepcionista", "Salir" };
+			
+			int opcion;
+			do {
+				opcion = JOptionPane.showOptionDialog(null, "elija opción", null, 0, 0, null, opciones, opciones);
+				switch (opcion) {
+				case 0:
+					Admin.menu();
+					break;
+				case 1:
+					Doctor encontrado =  Doctor.login();
+					if (encontrado != null) {
+						encontrado.menu();
+						
+					}
+					break;
+
+				case 2:
+					Recepcionista encontradoRecepcionista =  Recepcionista.loginRecepcionista();
+					if (encontradoRecepcionista != null) {
+						encontradoRecepcionista.menu();
+						
+					}				
+					break;
+				case 3:
+					JOptionPane.showMessageDialog(null, "Saliendo");
+					break;
+				default:
+					break;
 				}
-				break;
 
-			case 2:
-				JOptionPane.showMessageDialog(null, "completar");
-				break;
-			case 3:
-				JOptionPane.showMessageDialog(null, "Saliendo");
-				break;
-			default:
-				break;
-			}
+			} while (opcion != 3);
 
-		} while (opcion != 3);
+	    
+	   
+	}
 
-    
-   
-    }
 }

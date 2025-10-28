@@ -10,6 +10,8 @@ import java.util.stream.Collectors;
 import javax.swing.JOptionPane;
 import com.mysql.jdbc.exceptions.jdbc4.MySQLIntegrityConstraintViolationException;
 
+import bll.Doctor;
+import bll.Recepcionista;
 import bll.Usuario;
 import repository.Encriptador; // Mantenemos el nombre de paquete de tu profesor
 
@@ -18,14 +20,14 @@ public class DtoUsuario {
 	private static Connection con = Conexion.getInstance().getConnection();
 
   
-	public static Usuario login(String mail, String contrasenia) {	
-	    Usuario usuario = null;
+	public static Doctor login(String mail, String contrasenia) {	
+		Doctor usuario = null;
 	    try {
 	        PreparedStatement stmt = con.prepareStatement(
 	            "SELECT * FROM usuario WHERE mail = ? AND contrasenia = ?" 
 	        );
 	        stmt.setString(1, mail);
-	        stmt.setString(2, contrasenia); // Siempre encriptar al validar
+	        stmt.setString(2, Encriptador.encriptar(contrasenia)); // Siempre encriptar al validar
 
 	        ResultSet rs = stmt.executeQuery();
 
@@ -36,7 +38,7 @@ public class DtoUsuario {
 	            String dni = rs.getString("dni");           // Campo de tu proyecto
 	            String tipo = rs.getString("tipo");
 
-	            usuario = new Usuario(id, nombre, apellido, mail, contrasenia, dni, tipo);
+	            usuario = new Doctor(id, nombre, apellido, mail, contrasenia, dni, tipo);
 	        } else {
 	            JOptionPane.showMessageDialog(null, "Mail o contraseña incorrectos.");
 	        }
@@ -48,6 +50,35 @@ public class DtoUsuario {
 	    return usuario;
 	}
 
+	public static Recepcionista loginRecepcionista(String mail, String contrasenia) {	
+		Recepcionista usuario = null;
+	    try {
+	        PreparedStatement stmt = con.prepareStatement(
+	            "SELECT * FROM usuario WHERE mail = ? AND contrasenia = ?" 
+	        );
+	        stmt.setString(1, mail);
+	        stmt.setString(2, Encriptador.encriptar(contrasenia)); // Siempre encriptar al validar
+
+	        ResultSet rs = stmt.executeQuery();
+
+	        if (rs.next()) {
+	            int id = rs.getInt("id");
+	            String nombre = rs.getString("nombre");
+	            String apellido = rs.getString("apellido"); // Campo de tu proyecto
+	            String dni = rs.getString("dni");           // Campo de tu proyecto
+	            String tipo = rs.getString("tipo");
+
+	            usuario = new Recepcionista(id, nombre, apellido, mail, contrasenia, dni, tipo);
+	        } else {
+	            JOptionPane.showMessageDialog(null, "Mail o contraseña incorrectos.");
+	        }
+
+	    } catch (Exception e) {
+	        JOptionPane.showMessageDialog(null, "Error de conexión o consulta: " + e.getMessage());
+	        e.printStackTrace();
+	    }
+	    return usuario;
+	}
 	
 	public static Usuario buscarPorId() {
 		int id = 0;

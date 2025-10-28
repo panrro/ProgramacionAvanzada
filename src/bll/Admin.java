@@ -26,9 +26,8 @@ public class Admin extends Usuario {
 	@Override
     public void menu() {
         String[] opcionesMenu = {
-            "Gestionar usuarios",          
+            "Gestionar Usuarios",          
             "Gestionar ObraSocial",
-            "Agregar recepcionista",
             "Cerrar Sesión"             
         };
         
@@ -39,7 +38,7 @@ public class Admin extends Usuario {
 
             switch (opcionSeleccionada) {
                 case 0:
-                		String[] opcionesDesplegable = {"Agregar Recepcionista", "Agregar Doctor", "Eliminar Usuario", "Editar Usuario", "Ver Usuarios"};
+                		String[] opcionesDesplegable = {"Agregar Recepcionista", "Agregar Doctor", "Eliminar Usuario", "Editar Usuario", 						"Ver Usuarios"};
                 		String elegida = (String) JOptionPane.showInputDialog(null, "Ingrese opcion", "", 0, null, 						opcionesDesplegable,opcionesDesplegable[0]);
                 		
                 		switch (elegida) {
@@ -96,6 +95,6 @@ public class Admin extends Usuario {
                 	JOptionPane.showMessageDialog(null, "Cerrando sesión...");
                     break;
                                           }
-        } while (opcionSeleccionada != 3);
+        } while (opcionSeleccionada != 2);
     }
 }

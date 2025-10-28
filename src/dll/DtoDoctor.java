@@ -5,6 +5,7 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.LinkedList;
 import java.util.List;
 import javax.swing.JOptionPane;
 import com.mysql.jdbc.exceptions.jdbc4.MySQLIntegrityConstraintViolationException;
@@ -17,49 +18,30 @@ public class DtoDoctor {
 
     private static Connection con = Conexion.getInstance().getConnection();
 
-//    public static List<String> cargarEspecialidades() {
-//        List<String> especialidades = new ArrayList<>();
-//        
-//        try {
-//            PreparedStatement stmt = con.prepareStatement(
-//                "SELECT especialidad FROM doctor WHERE usuario_id = ?" 
-//            );
-//            stmt.setInt(1, doctorId);
-//
-//            ResultSet rs = stmt.executeQuery();
-//
-//            while (rs.next()) {
-//                especialidades.add(rs.getString("especialidad"));
-//            }
-//        } catch (Exception e) {
-//            JOptionPane.showMessageDialog(null, "Error al cargar especialidades (Tabla doctor): " + e.getMessage());
-//            e.printStackTrace();
-//        }
-//        return especialidades;
-//    }
+    public static boolean EditarUsuario(Doctor doctor) {
+        try {
+        	PreparedStatement statement = con.prepareStatement(
+            	"UPDATE usuario SET nombre = ?, apellido = ?, dni = ?, mail = ?, contrasenia = ?  WHERE id = ?"
+            			);
+            			statement.setString(1, doctor.getNombre());
+            			statement.setString(2, doctor.getApellido());
+            			statement.setString(3, doctor.getDni());
+            			statement.setString(4, doctor.getMail());
+            			statement.setString(5, doctor.getContrasenia());
+            			statement.setString(6, doctor.getTipo());
+            			statement.setInt(7, doctor.getId());
 
-//    public static boolean agregarNuevaEspecialidad() {
-//        try {
-//            PreparedStatement stmt = con.prepareStatement(
-//                    "INSERT INTO especialidad (nombre) VALUES (?)"
-//            );
-//            stmt.setString(1, Especialidad.);
-//            stmt.setInt(2, doctorId);
-//
-//            int filasAfectadas = stmt.executeUpdate();
-//            
-//            if (filasAfectadas > 0) {
-//                JOptionPane.showMessageDialog(null, "Especialidad principal actualizada correctamente.");
-//                return true;
-//            }
-//            return false;
-//
-//        } catch (Exception e) {
-//        	e.printStackTrace();
-//            JOptionPane.showMessageDialog(null, "Error al actualizar especialidad");
-//            return false;
-//        }
-//    }
+            int filas = statement.executeUpdate();
+            if (filas > 0) {
+                System.out.println("Usuario editado correctamente.");
+                return true;
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+            return false;
+        }
+        return false;
+    }
     
     public static boolean agregarDoctor(int id, int obraSocialId) {
         try {             	
@@ -81,5 +63,27 @@ public class DtoDoctor {
         }
         return false;
 }
+    
+    public static LinkedList<Doctor> VerDoctores() {
+    	LinkedList<Doctor> doctores = new LinkedList<Doctor>();
+        try {             	
+            PreparedStatement stmt = con.prepareStatement(
+            		"SELECT * FROM doctor");	           
+
+			
+			ResultSet rs = stmt.executeQuery();
+			
+			while (rs.next()) { //Aca en ves de if, va un while ya que al ser una lista especialidades, voy a querer que mientra que 		hayan datos se repitam y que no me traiga solo la fila afectada con el if
+				 int id = rs.getInt("id");
+				 int especialidad_id = rs.getInt("especialidad_id");
+				 int usuario_id = rs.getInt("usuario_id");
+				 int obrasocial_id = rs.getInt("obrasocial_id");
+				 doctores.add(new Doctor(id,especialidad_id, usuario_id,obrasocial_id));	        
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return doctores;
+	}
     
 }
