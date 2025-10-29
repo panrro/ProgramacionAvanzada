@@ -1,6 +1,14 @@
 package bll;
 import bll.ObraSocial;
+
+import java.util.LinkedList;
+
 import javax.swing.JOptionPane;
+
+import dll.DtoDoctor;
+import dll.DtoEspecialidad;
+import dll.DtoObraSocial;
+import dll.DtoRecepcionista;
 import dll.DtoUsuario; // Necesario para la eliminación
 import repository.Validaciones; // Necesario para la validación de datos
 
@@ -43,11 +51,11 @@ public class Admin extends Usuario {
                 		
                 		switch (elegida) {
 						case "Agregar Recepcionista":
-							Recepcionista.agregarRecepcionista();
+							Admin.agregarRecepcionista();
 							break;
 							
 						case "Agregar Doctor":
-							Doctor.agregarDoctor();
+							Admin.agregarDoctor();
 							break;
 
 						case "Eliminar Usuario":
@@ -74,6 +82,8 @@ public class Admin extends Usuario {
 						break;
 
 					case "Eliminar ObraSocial":
+						int id = DtoObraSocial.buscarPorId().getId();
+						DtoObraSocial.EliminarObraSocial(id);
 						break;
 						
 					case "Editar ObraSocial":
@@ -97,4 +107,35 @@ public class Admin extends Usuario {
                                           }
         } while (opcionSeleccionada != 2);
     }
+	
+	public static boolean agregarDoctor() {
+			
+			Usuario.agregarUsuario();
+			LinkedList<Especialidad> lista = DtoEspecialidad.VerEspecialidad();
+			String[] especialidades = new String[lista.size()];
+			for (int i = 0; i < especialidades.length; i++) {
+				especialidades[i] = lista.get(i).getNombre();
+			}
+			int idElegido = JOptionPane.showOptionDialog(null, "", null, 0, 0, null, especialidades, especialidades[0]);
+			idElegido++;
+			
+			LinkedList<ObraSocial> listaObraSocial = DtoObraSocial.mostrarObraSociales();
+			String [] obrasSociales = new String [listaObraSocial.size()];
+			for (int i = 0; i < obrasSociales.length; i++) {
+				obrasSociales[i] = listaObraSocial.get(i).getNombre();
+			}
+			int idElegidoObraSocial = JOptionPane.showOptionDialog(null, "", null, 0, 0, null, obrasSociales, obrasSociales[0]);
+			idElegido++;
+			
+			DtoDoctor.agregarDoctor(idElegido, idElegidoObraSocial);
+			return true;
+		}
+	
+	public static boolean agregarRecepcionista() {
+		
+		Usuario.agregarUsuario();
+		DtoRecepcionista.agregarRecepcionista();
+		
+		return true;
+	}
 }

@@ -27,15 +27,15 @@ public class DtoUsuario {
 	            "SELECT * FROM usuario WHERE mail = ? AND contrasenia = ?" 
 	        );
 	        stmt.setString(1, mail);
-	        stmt.setString(2, Encriptador.encriptar(contrasenia)); // Siempre encriptar al validar
+	        stmt.setString(2, Encriptador.encriptar(contrasenia)); 
 
 	        ResultSet rs = stmt.executeQuery();
 
 	        if (rs.next()) {
 	            int id = rs.getInt("id");
 	            String nombre = rs.getString("nombre");
-	            String apellido = rs.getString("apellido"); // Campo de tu proyecto
-	            String dni = rs.getString("dni");           // Campo de tu proyecto
+	            String apellido = rs.getString("apellido"); 
+	            String dni = rs.getString("dni");          
 	            String tipo = rs.getString("tipo");
 
 	            usuario = new Doctor(id, nombre, apellido, mail, contrasenia, dni, tipo);
@@ -57,15 +57,15 @@ public class DtoUsuario {
 	            "SELECT * FROM usuario WHERE mail = ? AND contrasenia = ?" 
 	        );
 	        stmt.setString(1, mail);
-	        stmt.setString(2, Encriptador.encriptar(contrasenia)); // Siempre encriptar al validar
+	        stmt.setString(2, Encriptador.encriptar(contrasenia)); 
 
 	        ResultSet rs = stmt.executeQuery();
 
 	        if (rs.next()) {
 	            int id = rs.getInt("id");
 	            String nombre = rs.getString("nombre");
-	            String apellido = rs.getString("apellido"); // Campo de tu proyecto
-	            String dni = rs.getString("dni");           // Campo de tu proyecto
+	            String apellido = rs.getString("apellido"); 
+	            String dni = rs.getString("dni");           
 	            String tipo = rs.getString("tipo");
 
 	            usuario = new Recepcionista(id, nombre, apellido, mail, contrasenia, dni, tipo);

@@ -67,18 +67,25 @@ public class DtoDoctor {
     public static LinkedList<Doctor> VerDoctores() {
     	LinkedList<Doctor> doctores = new LinkedList<Doctor>();
         try {             	
-            PreparedStatement stmt = con.prepareStatement(
-            		"SELECT * FROM doctor");	           
+        	PreparedStatement stmt = con.prepareStatement("""
+        		    SELECT d.id,
+        		           u.nombre AS nombre_usuario,
+        		           e.nombre AS nombre_especialidad,
+        		           o.nombre AS nombre_obrasocial
+        		    FROM doctor d
+        		    JOIN usuario u ON d.usuario_id = u.id
+        		    JOIN especialidad e ON d.especialidad_id = e.id
+        		    JOIN obrasocial o ON d.obrasocial_id = o.id
+        		""");
 
-			
-			ResultSet rs = stmt.executeQuery();
-			
-			while (rs.next()) { //Aca en ves de if, va un while ya que al ser una lista especialidades, voy a querer que mientra que 		hayan datos se repitam y que no me traiga solo la fila afectada con el if
-				 int id = rs.getInt("id");
-				 int especialidad_id = rs.getInt("especialidad_id");
-				 int usuario_id = rs.getInt("usuario_id");
-				 int obrasocial_id = rs.getInt("obrasocial_id");
-				 doctores.add(new Doctor(id,especialidad_id, usuario_id,obrasocial_id));	        
+        		ResultSet rs = stmt.executeQuery();
+        		while (rs.next()) {
+        		    int id = rs.getInt("id");
+        		    String nombreUsuario = rs.getString("nombre_usuario");
+        		    String nombreEspecialidad = rs.getString("nombre_especialidad");
+        		    String nombreObraSocial = rs.getString("nombre_obrasocial");
+
+        		    doctores.add(new Doctor(id, nombreUsuario, nombreEspecialidad, nombreObraSocial));	        
 			}
 		} catch (Exception e) {
 			e.printStackTrace();

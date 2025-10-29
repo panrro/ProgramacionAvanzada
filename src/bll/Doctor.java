@@ -14,9 +14,7 @@ public class Doctor extends Usuario {
 
 	
 	protected int id2;
-	int especialidad_id;
-	int usuario_id;
-	int obrasocial_id;
+	private String nombreUsuario, nombreEspecialidad, nombreObraSocial;
 	
 	public Doctor(int id, String nombre, String apellido, String mail, String contrasenia, String dni, String tipo) {
 		super(id, nombre, apellido, mail, contrasenia, dni, tipo);
@@ -29,12 +27,12 @@ public class Doctor extends Usuario {
 
 	}
     
-	public Doctor(int id2, int especialidad_id, int usuario_id, int obrasocial_id) {
+	public Doctor(int id2, String nombreUsuario, String nombreEspecialidad, String nombreObraSocial) {
 		super();
 		this.id2= id2;
-		this.especialidad_id= especialidad_id;
-		this.usuario_id= usuario_id;
-		this.obrasocial_id= obrasocial_id;
+		this.nombreUsuario= nombreUsuario;
+		this.nombreEspecialidad= nombreEspecialidad;
+		this.nombreObraSocial= nombreObraSocial;
 	}
 
 	public int getId() {
@@ -49,34 +47,34 @@ public class Doctor extends Usuario {
 		this.id2 = id2;
 	}
 
-	public int getEspecialidad_id() {
-		return especialidad_id;
-	}
-
-	public void setEspecialidad_id(int especialidad_id) {
-		this.especialidad_id = especialidad_id;
-	}
-
-	public int getUsuario_id() {
-		return usuario_id;
-	}
-
-	public void setUsuario_id(int usuario_id) {
-		this.usuario_id = usuario_id;
-	}
-
-	public int getObrasocial_id() {
-		return obrasocial_id;
-	}
-
-	public void setObrasocial_id(int obrasocial_id) {
-		this.obrasocial_id = obrasocial_id;
-	}
-
 	public void setId(int id) {
 		this.id = id;
 	}
 	
+	public String getNombreUsuario() {
+		return nombreUsuario;
+	}
+
+	public void setNombreUsuario(String nombreUsuario) {
+		this.nombreUsuario = nombreUsuario;
+	}
+
+	public String getNombreEspecialidad() {
+		return nombreEspecialidad;
+	}
+
+	public void setNombreEspecialidad(String nombreEspecialidad) {
+		this.nombreEspecialidad = nombreEspecialidad;
+	}
+
+	public String getNombreObraSocial() {
+		return nombreObraSocial;
+	}
+
+	public void setNombreObraSocial(String nombreObraSocial) {
+		this.nombreObraSocial = nombreObraSocial;
+	}
+
 	@Override
     public void menu() {
         String[] opcionesMenu = {
@@ -136,36 +134,4 @@ public class Doctor extends Usuario {
         } while (opcionSeleccionada != 2);
     }
 	
-	
-
-	public static boolean agregarDoctor() {
-		
-		Usuario.agregarUsuario();
-		LinkedList<Especialidad> lista = DtoEspecialidad.VerEspecialidad();
-		String[] especialidades = new String[lista.size()];
-		for (int i = 0; i < especialidades.length; i++) {
-			especialidades[i] = lista.get(i).getNombre();
-		}
-		int idElegido = JOptionPane.showOptionDialog(null, "", null, 0, 0, null, especialidades, especialidades[0]);
-		idElegido++;
-		
-		LinkedList<ObraSocial> listaObraSocial = DtoObraSocial.mostrarObraSociales();
-		String [] obrasSociales = new String [listaObraSocial.size()];
-		for (int i = 0; i < obrasSociales.length; i++) {
-			obrasSociales[i] = listaObraSocial.get(i).getNombre();
-		}
-		int idElegidoObraSocial = JOptionPane.showOptionDialog(null, "", null, 0, 0, null, obrasSociales, obrasSociales[0]);
-		idElegido++;
-		
-		DtoDoctor.agregarDoctor(idElegido, idElegidoObraSocial);
-		return true;
-	}
-   
-    
-    
-    
-    	
-    
-    
-    
 }

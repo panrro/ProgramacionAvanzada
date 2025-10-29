@@ -112,4 +112,23 @@ public class DtoObraSocial {
 	        return false;
 	    }
 	
+	 public static void EliminarObraSocial(int id) {
+	        try {
+	            PreparedStatement statement = con.prepareStatement(
+	                "DELETE FROM `obrasocial` WHERE id = ?"
+	            );
+	            statement.setInt(1, id);
+
+	            int filas = statement.executeUpdate();
+	            if (filas > 0) {
+	                System.out.println("Obra Social eliminada correctamente.");
+	            } else {
+	                 JOptionPane.showMessageDialog(null, "No se encontró ninguna obra social con ese ID.");
+	            }
+	        } catch (MySQLIntegrityConstraintViolationException e) {
+	            JOptionPane.showMessageDialog(null, "ERROR: La obra socialtiene registros asociados (pacientes) y no puede ser eliminado.");
+	        } catch (Exception e) {
+	            e.printStackTrace();
+	        }
+	    }
 }

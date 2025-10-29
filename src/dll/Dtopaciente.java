@@ -2,10 +2,13 @@ package dll;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.sql.SQLIntegrityConstraintViolationException;
+import java.util.LinkedList;
 
 import javax.swing.JOptionPane;
 
+import bll.Doctor;
 import bll.Paciente;
 import bll.Usuario;
 
@@ -47,5 +50,28 @@ public class Dtopaciente {
 			        return false;
 			    }
 			    return false;
+			}
+			
+			public static LinkedList<Paciente> VerPacientes() {
+		    	LinkedList<Paciente> pacientes = new LinkedList<Paciente>();
+		        try {             	
+		            PreparedStatement stmt = con.prepareStatement(
+		            		"SELECT * FROM paciente");	           
+					ResultSet rs = stmt.executeQuery();
+					
+					while (rs.next()) { //Aca en ves de if, va un while ya que al ser una lista especialidades, voy a querer que mientra que 		hayan datos se repitam y que no me traiga solo la fila afectada con el if
+						 int id = rs.getInt("id");
+						 String nombre = rs.getString("nombre");
+						 String apellido = rs.getString("apellido");
+						 String dni = rs.getString("dni");
+						 int obrasocial_id = rs.getInt("obrasocial_id");
+						 int edad = rs.getInt("edad");
+						 int doctor_id = rs.getInt("doctor_id");
+						 pacientes.add(new Paciente(id,nombre, apellido, dni,obrasocial_id, edad, doctor_id));	        
+					}
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
+				return pacientes;
 			}
 }

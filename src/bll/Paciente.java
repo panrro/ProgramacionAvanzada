@@ -17,6 +17,24 @@ public class Paciente {
 	private String apellido;
 	private String dni;
 	private int edad;
+	private int obrasocial_id;
+	public int getDoctor_id() {
+		return doctor_id;
+	}
+
+	public void setDoctor_id(int doctor_id) {
+		this.doctor_id = doctor_id;
+	}
+
+	public int getObrasocial_id() {
+		return obrasocial_id;
+	}
+
+	public void setObrasocial_id(int obrasocial_id) {
+		this.obrasocial_id = obrasocial_id;
+	}
+
+	private int doctor_id;
 	
 	public Paciente (int id, String nombre, String apellido, String dni, int edad) {
 		this.id = id;
@@ -24,6 +42,17 @@ public class Paciente {
 		this.apellido=apellido;
 		this.dni = dni;
 		this.edad= edad;
+	}
+
+	public Paciente(int id, String nombre, String apellido, String dni, int obrasocial_id, int edad,
+			int doctor_id) {
+		this.id = id;
+		this.nombre=nombre;
+		this.apellido=apellido;
+		this.dni = dni;
+		this.obrasocial_id=obrasocial_id;
+		this.edad= edad;
+		this.doctor_id=doctor_id;
 	}
 
 	public int getId() {
