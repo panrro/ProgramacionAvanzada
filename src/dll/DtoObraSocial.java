@@ -94,10 +94,9 @@ public class DtoObraSocial {
 	 public static boolean EditarObraSocial(ObraSocial obraSocial) {
 	        try {
 	        	PreparedStatement statement = con.prepareStatement(
-	        			"UPDATE obrasocial SET nombre = ?, descuento = ? WHERE id = ?");
-	            			statement.setString(1, obraSocial.getNombre());
-	            			statement.setDouble(2, obraSocial.getDescuento());	            			
-	            			statement.setInt(3, obraSocial.getId());
+	        			"UPDATE obrasocial SET descuento = ? WHERE id = ?");
+	            			statement.setDouble(1, obraSocial.getDescuento());	            			
+	            			statement.setInt(2, obraSocial.getId());
 
 	            int filas = statement.executeUpdate();
 	            if (filas > 0) {
@@ -126,7 +125,7 @@ public class DtoObraSocial {
 	                 JOptionPane.showMessageDialog(null, "No se encontró ninguna obra social con ese ID.");
 	            }
 	        } catch (MySQLIntegrityConstraintViolationException e) {
-	            JOptionPane.showMessageDialog(null, "ERROR: La obra socialtiene registros asociados (pacientes) y no puede ser eliminado.");
+	            JOptionPane.showMessageDialog(null, "ERROR: La obra social tiene doctores o pacientes y no puede ser eliminado.");
 	        } catch (Exception e) {
 	            e.printStackTrace();
 	        }

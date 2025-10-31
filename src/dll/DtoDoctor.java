@@ -43,11 +43,11 @@ public class DtoDoctor {
         return false;
     }
     
-    public static boolean agregarDoctor(int id, int obraSocialId) {
+    public static boolean agregarDoctor(int idEspecialidad, int obraSocialId) {
         try {             	
             PreparedStatement statement = con.prepareStatement(
             		"INSERT INTO `doctor`( `especialidad_id`, `usuario_id`, `obrasocial_id` ) VALUES (?,?,?)");
-            statement.setInt(1, id);
+            statement.setInt(1, idEspecialidad);
             statement.setInt(2, Usuario.UltimoUsuario().getId());
             statement.setInt(3, obraSocialId);
 
@@ -92,5 +92,65 @@ public class DtoDoctor {
 		}
 		return doctores;
 	}
+    
+    public static Doctor VerPerfilDoctor(int idDoctor) {
+        Doctor doctor = null;
+        try {
+            PreparedStatement stmt = con.prepareStatement("""
+                SELECT 
+                    d.id AS doctor_id,
+                    u.nombre AS nombre,
+                    u.apellido AS apellido,
+                    e.nombre AS nombre,
+                    o.nombre AS nombre
+                FROM doctor d
+                JOIN usuario u ON d.usuario_id = u.id
+                JOIN especialidad e ON d.especialidad_id = e.id
+                JOIN obrasocial o ON d.obrasocial_id = o.id
+                WHERE d.id = ?
+            """);
+
+            stmt.setInt(1, idDoctor);
+            ResultSet rs = stmt.executeQuery();
+
+            if (rs.next()) {
+                int id = rs.getInt("doctor_id");
+                String nombreUsuario = rs.getString("nombre") + " " + rs.getString("apellido");
+                String nombreEspecialidad = rs.getString("nombre");
+                String nombreObraSocial = rs.getString("nombre");
+
+                doctor = new Doctor(id, nombreUsuario, nombreEspecialidad, nombreObraSocial);
+            }
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return doctor;
+    }
+    
+    public static boolean EditarDoctor(Doctor doctor) {
+        try {
+        	PreparedStatement statement = con.prepareStatement(
+            	"UPDATE usuario SET nombre = ?, apellido = ?, dni = ?, mail = ?, contrasenia = ?, tipo = ? WHERE id = ?"
+            			);
+            			statement.setString(1, doctor.getNombre());
+            			statement.setString(2, doctor.getApellido());
+            			statement.setString(3, doctor.getDni());
+            			statement.setString(4, doctor.getMail());
+            			statement.setString(5, doctor.getContrasenia());
+            			statement.setString(6, doctor.getTipo());
+            			statement.setInt(7, doctor.getId());
+
+            int filas = statement.executeUpdate();
+            if (filas > 0) {
+                System.out.println("Usuario editado correctamente.");
+                return true;
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+            return false;
+        }
+        return false;
+    }
     
 }

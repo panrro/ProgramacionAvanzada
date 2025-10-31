@@ -74,4 +74,30 @@ public class Dtopaciente {
 				}
 				return pacientes;
 			}
+			
+			public static LinkedList<Paciente> VerPacientesPorDoctor(int idDoctor) {
+			    LinkedList<Paciente> pacientes = new LinkedList<>();
+			    try {
+			        PreparedStatement stmt = con.prepareStatement(
+			            "SELECT * FROM paciente WHERE doctor_id = ?"
+			        );
+			        stmt.setInt(1, idDoctor);
+			        ResultSet rs = stmt.executeQuery();
+
+			        while (rs.next()) {
+			            int id = rs.getInt("id");
+			            String nombre = rs.getString("nombre");
+			            String apellido = rs.getString("apellido");
+			            String dni = rs.getString("dni");
+			            int obrasocial_id = rs.getInt("obrasocial_id");
+			            int edad = rs.getInt("edad");
+			            int doctor_id = rs.getInt("doctor_id");
+
+			            pacientes.add(new Paciente(id, nombre, apellido, dni, obrasocial_id, edad, doctor_id));
+			        }
+			    } catch (Exception e) {
+			        e.printStackTrace();
+			    }
+			    return pacientes;
+			}
 }

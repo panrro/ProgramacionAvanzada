@@ -1,7 +1,11 @@
 package bll;
 
 import java.util.LinkedList;
+import java.util.List;
 
+import javax.swing.JOptionPane;
+
+import dll.DtoObraSocial;
 import dll.DtoTurnos;
 import dll.DtoUsuario;
 
@@ -56,9 +60,33 @@ public class Turnos {
 	public void setApellidoPaciente(String apellidoPaciente) {
 		this.apellidoPaciente = apellidoPaciente;
 	}
+	
+	@Override
+	public String toString() {
+	    return "Turno N° " + id +
+	           " | Fecha: " + fecha +
+	           " | Doctor: " + nombreDoc + " " + apellidoDoc +
+	           " | Paciente: " + apellidoPaciente;
+	}
 
 	public static LinkedList<Turnos> mostrarTurnos(){
 		return DtoTurnos.VerTurnos();
+	}
+	
+	public static void verListadoTurnos() { 
+	    List<Turnos> listaTurnos = mostrarTurnos(); 
+	    
+	    if (listaTurnos.isEmpty()) {
+	        JOptionPane.showMessageDialog(null, "No hay turnos registrados en el sistema.");
+	        return;
+	    }
+
+	    StringBuilder sb = new StringBuilder(" Listado de Turnos \n");
+	    for (Turnos t : listaTurnos) {
+	        sb.append(t.toString()).append("\n"); 
+	    }
+
+	    JOptionPane.showMessageDialog(null, sb.toString());
 	}
 	
 }

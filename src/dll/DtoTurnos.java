@@ -147,5 +147,40 @@ public class DtoTurnos {
 	    return turno;
 	}
 
+	public static LinkedList<Turnos> VerTurnosPorDoctor(int idDoctor) {
+	    LinkedList<Turnos> lista = new LinkedList<>();
+	    try {
+	        PreparedStatement stmt = con.prepareStatement("""
+	            SELECT 
+	                t.id AS turno_id,
+	                t.fecha,
+	                d.id AS doctor_id,
+	                u.nombre AS nombre_doctor,
+	                u.apellido AS apellido_doctor,
+	                p.apellido AS apellido_paciente
+	            FROM turnos t
+	            JOIN doctor d ON t.doctor_id = d.id
+	            JOIN usuario u ON d.usuario_id = u.id
+	            JOIN paciente p ON t.paciente_id = p.id
+	            WHERE t.doctor_id = ?
+	        """);
+
+	        stmt.setInt(1, idDoctor);
+	        ResultSet rs = stmt.executeQuery();
+
+	        while (rs.next()) {
+	            int id = rs.getInt("turno_id");
+	            String fecha = rs.getString("fecha");
+	            String nombreDoc = rs.getString("nombre_doctor");
+	            String apellidoDoc = rs.getString("apellido_doctor");
+	            String apellidoPaciente = rs.getString("apellido_paciente");
+
+	            lista.add(new Turnos(id, fecha, nombreDoc, apellidoDoc, apellidoPaciente));
+	        }
+	    } catch (Exception e) {
+	        e.printStackTrace();
+	    }
+	    return lista;
+	}
 
 }

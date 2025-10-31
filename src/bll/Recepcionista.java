@@ -33,6 +33,10 @@ public class Recepcionista extends Usuario{
 		this.apellido=apellido;
 	}
 
+	public Recepcionista(int id, int usuarioId) {
+		// TODO Auto-generated constructor stub
+	}
+
 	public int getId() {
 		return id;
 	}
@@ -63,7 +67,7 @@ public class Recepcionista extends Usuario{
                 		Recepcionista.agregarPaciente();            			
                     break;
                 case 1:
-                	
+                	Turnos.verListadoTurnos();
                     break;
                 case 2:
                 	int id = DtoTurnos.buscarPorId().getId();
@@ -75,7 +79,7 @@ public class Recepcionista extends Usuario{
                 	JOptionPane.showMessageDialog(null, "Cerrando sesión...");
                     break;
                                           }
-        } while (opcionSeleccionada != 2);
+        } while (opcionSeleccionada != 3);
     }
 	
 	public static boolean agregarPaciente() {
@@ -89,9 +93,10 @@ public class Recepcionista extends Usuario{
 	    for (int i = 0; i < obrasSociales.length; i++) {
 	        obrasSociales[i] = listaObraSocial.get(i).getNombre();
 	    }
-	    int idElegidoObraSocial = JOptionPane.showOptionDialog(
+	    int indiceObraSocial = JOptionPane.showOptionDialog(
 	            null, "Seleccione obra social", null, 0, 0, null, obrasSociales, obrasSociales[0]);
-	    idElegidoObraSocial++;
+	    int idElegidoObraSocial = listaObraSocial.get(indiceObraSocial).getId();
+
 
 	    int edad = Integer.parseInt(JOptionPane.showInputDialog("Ingrese edad"));
 
@@ -99,7 +104,7 @@ public class Recepcionista extends Usuario{
 	    String[] doctores = new String[lista.size()];
 	    for (int i = 0; i < doctores.length; i++) {
 	        Doctor d = lista.get(i);
-	        doctores[i] = "ID: " + d.getId2() +
+	        doctores[i] = "ID: " + d.getIdDoctor() +
 	                      " | Usuario: " + d.getNombreUsuario() +
 	                      " | Especialidad: " + d.getNombreEspecialidad() +
 	                      " | Obra Social: " + d.getNombreObraSocial();
@@ -108,7 +113,7 @@ public class Recepcionista extends Usuario{
 	    int indiceSeleccionado = JOptionPane.showOptionDialog(
 	            null, "Seleccione un doctor", null, 0, 0, null, doctores, doctores[0]);
 	    Doctor doctorSeleccionado = lista.get(indiceSeleccionado);
-	    int idElegidoDoctor = doctorSeleccionado.getId2();
+	    int idElegidoDoctor = doctorSeleccionado.getIdDoctor();
 
 	    // Inserto el paciente
 	    Dtopaciente.InsertarPaciente(nombre, apellido, dni, idElegidoObraSocial, edad, idElegidoDoctor);
@@ -161,7 +166,7 @@ public class Recepcionista extends Usuario{
     String[] doctores = new String[lista.size()];
     for (int i = 0; i < doctores.length; i++) {
         Doctor d = lista.get(i);
-        doctores[i] = "ID: " + d.getId2() +
+        doctores[i] = "ID: " + d.getIdDoctor() +
                       " | Usuario: " + d.getNombreUsuario() +
                       " | Especialidad: " + d.getNombreEspecialidad() +
                       " | Obra Social: " + d.getNombreObraSocial();
@@ -170,7 +175,7 @@ public class Recepcionista extends Usuario{
 		Doctor doctorSeleccionado = lista.get(indiceSeleccionado); 
 	    
 	    // 3. Obtener el ID real del doctor
-	    int idElegidoDoctor = doctorSeleccionado.getId2();	
+	    int idElegidoDoctor = doctorSeleccionado.getIdDoctor();	
 	   	    
 	    LinkedList<Paciente> listaPacientes = Dtopaciente.VerPacientes();
 		 String[] pacientes = new String[listaPacientes.size()];

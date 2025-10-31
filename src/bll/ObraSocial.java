@@ -89,10 +89,9 @@ public class ObraSocial {
 		public static boolean EditarObraSocial() {
 		
 		ObraSocial encontrado = DtoObraSocial.buscarPorId();
-		String  nombre; double descuento;
-		 nombre =  Validaciones.ValidarString("Ingrese nombre");
+		 double descuento;
 		 descuento = Integer.parseInt(JOptionPane.showInputDialog("Ingrese nuevo precio de descuento"));
-		ObraSocial nueva = new ObraSocial(encontrado.getId(),nombre,descuento);
+		ObraSocial nueva = new ObraSocial(encontrado.getId(),encontrado.getNombre(),descuento);
 		  	return DtoObraSocial.EditarObraSocial(nueva);
     
 	}

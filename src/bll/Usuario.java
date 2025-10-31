@@ -63,6 +63,15 @@ public class Usuario {
 
 	
 	
+	public Usuario(int id, String nombre, String apellido, String mail, String contrasenia, String dni) {
+		this.id=id;
+		this.nombre = nombre;
+		this.apellido=apellido;
+		this.mail = mail;
+		this.contrasenia = contrasenia;
+		this.dni = dni;
+			}
+
 	public String getApellido() {
 		return apellido;
 	}
@@ -184,7 +193,7 @@ public class Usuario {
 	public static boolean EditarUsuario() {
 		
 		Usuario encontrado = DtoUsuario.buscarPorId();
-		String  apellido, mail,contr, dni,tipo,nombre;
+		String  apellido, mail,contrasenia, dni,tipo,nombre;
 		 nombre =  Validaciones.ValidarString("Ingrese nombre");
 		 apellido = Validaciones.ValidarString("Ingrese apellido");
 		do {
@@ -194,12 +203,11 @@ public class Usuario {
 			}
 		} while (Validaciones.validate(mail)==false);
 		
-		  contr = Validaciones.ValidarString("Ingrese contraseña");
+		contrasenia = Validaciones.ValidarString("Ingrese contraseña");
 		  dni = Validaciones.ValidarString("Ingrese dni");
-		  String[] roles = {"Doctor","Recepcionista", "Administrador"};
-		 tipo = (String) JOptionPane.showInputDialog(null, "Ingrese tipo", "", 0, null, roles,roles[0]);
+		  
 		 
-		  Usuario nuevo = new Usuario(encontrado.getId(),nombre,apellido,mail,contr, dni,tipo);
+		  Usuario nuevo = new Usuario(encontrado.getId(),nombre,apellido,mail,contrasenia, dni, encontrado.getTipo());
 		  	return DtoUsuario.EditarUsuario(nuevo);
     
 	}

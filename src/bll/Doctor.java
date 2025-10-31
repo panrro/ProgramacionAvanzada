@@ -3,77 +3,62 @@ package bll;
 import java.util.LinkedList;
 
 import javax.swing.JOptionPane;
-
+import bll.Turnos;
 import dll.DtoDoctor;
 import dll.DtoEspecialidad;
+import dll.DtoHistoriaClinica;
 import dll.DtoObraSocial;
 import dll.DtoRecepcionista;
+import dll.DtoTurnos;
 import dll.DtoUsuario;
+import dll.Dtopaciente;
+import repository.Validaciones;
 
 public class Doctor extends Usuario {
 
-	
-	protected int id2;
-	private String nombreUsuario, nombreEspecialidad, nombreObraSocial;
-	
-	public Doctor(int id, String nombre, String apellido, String mail, String contrasenia, String dni, String tipo) {
-		super(id, nombre, apellido, mail, contrasenia, dni, tipo);
-		this.id = id;
+	    private int idDoctor; // ID real de la tabla doctor
+	    private String nombreUsuario;
+	    private String nombreEspecialidad;
+	    private String nombreObraSocial;
 
-	}
-	
-	public Doctor(String nombre, String apellido, String mail, String contrasenia, String dni, String tipo) {
-		super(nombre, apellido, mail, contrasenia, dni, tipo);
+	    // Constructor para login
+	    public Doctor( String nombre, String apellido, String mail, String contrasenia, String dni, String tipo) {
+	        super( nombre, apellido, mail, contrasenia, dni, tipo);
+	    }
 
-	}
-    
-	public Doctor(int id2, String nombreUsuario, String nombreEspecialidad, String nombreObraSocial) {
-		super();
-		this.id2= id2;
-		this.nombreUsuario= nombreUsuario;
-		this.nombreEspecialidad= nombreEspecialidad;
-		this.nombreObraSocial= nombreObraSocial;
-	}
+	    // Constructor para mostrar doctores con especialidad y obra social
+	    public Doctor(int idDoctor, String nombreUsuario, String nombreEspecialidad, String nombreObraSocial) {
+	        super();
+	        this.idDoctor = idDoctor;
+	        this.nombreUsuario = nombreUsuario;
+	        this.nombreEspecialidad = nombreEspecialidad;
+	        this.nombreObraSocial = nombreObraSocial;
+	    }
 
-	public int getId() {
-		return id;
-	}
+	    public Doctor(int doctorId, int especialidadId, int usuarioId, int obraSocialId) {
+	    	this.idDoctor = doctorId;
+	    }
 
-	public int getId2() {
-		return id2;
-	}
+		public int getIdDoctor() {
+	        return idDoctor;
+	    }
 
-	public void setId2(int id2) {
-		this.id2 = id2;
-	}
+	    public void setIdDoctor(int idDoctor) {
+	        this.idDoctor = idDoctor;
+	    }
 
-	public void setId(int id) {
-		this.id = id;
-	}
-	
-	public String getNombreUsuario() {
-		return nombreUsuario;
-	}
+	    public String getNombreUsuario() {
+	        return nombreUsuario;
+	    }
 
-	public void setNombreUsuario(String nombreUsuario) {
-		this.nombreUsuario = nombreUsuario;
-	}
+	    public String getNombreEspecialidad() {
+	        return nombreEspecialidad;
+	    }
 
-	public String getNombreEspecialidad() {
-		return nombreEspecialidad;
-	}
+	    public String getNombreObraSocial() {
+	        return nombreObraSocial;
+	    }
 
-	public void setNombreEspecialidad(String nombreEspecialidad) {
-		this.nombreEspecialidad = nombreEspecialidad;
-	}
-
-	public String getNombreObraSocial() {
-		return nombreObraSocial;
-	}
-
-	public void setNombreObraSocial(String nombreObraSocial) {
-		this.nombreObraSocial = nombreObraSocial;
-	}
 
 	@Override
     public void menu() {
@@ -90,12 +75,14 @@ public class Doctor extends Usuario {
 
             switch (opcionSeleccionada) {
                 case 0:
-                		String[] opcionesDesplegable = {"Agregar especialidad", "Agregar obra social","Editar Perfil", "Ver perfil"};
+                		String[] opcionesDesplegable = {"Atender", "Agregar obraSocial","Editar Perfil", "Ver 						Perfil"};
                 		String elegida = (String) JOptionPane.showInputDialog(null, "Ingrese opcion", "", 0, null, 						opcionesDesplegable,opcionesDesplegable[0]);
                 		
                 		switch (elegida) {
-						case "Agregar especialidad":
-							break;
+						case "Atender":
+							
+							atenderPaciente();
+						       break;
 							
 						case "Agregar obraSocial":
 							break;
@@ -105,6 +92,7 @@ public class Doctor extends Usuario {
 							break;
 							
 						case "Ver Perfil":
+							verMiPerfil();
 							break;
 							
 						
@@ -114,24 +102,92 @@ public class Doctor extends Usuario {
 
             		String[] opciones2 = {"Ver Turnos"};
             		String elegida2 = (String) JOptionPane.showInputDialog(null, "Ingrese opcion", "", 0, null, 					opciones2,opciones2[0]);
+            		
                 	switch (elegida2) {
-					case "Ver turnos":
+					case "Ver Turnos":
+						verMisTurnos();
+						
 						break;
-
-					
 					}
                 	
                 	
                     break;
                 case 2:
                 	
-                    break;
-                    
-                case 3:
                 	JOptionPane.showMessageDialog(null, "Cerrando sesión...");
                     break;
+                    
+                
                                           }
         } while (opcionSeleccionada != 2);
     }
 	
+	public void verMiPerfil() {
+	    Doctor perfil = DtoDoctor.VerPerfilDoctor(this.getIdDoctor());
+	    if (perfil != null) {
+	        JOptionPane.showMessageDialog(null,
+	            "👨‍⚕️ PERFIL DEL DOCTOR\n\n" +
+	            "Nombre: " + perfil.getNombreUsuario() + "\n" +
+	            "Especialidad: " + perfil.getNombreEspecialidad() + "\n" +
+	            "Obra Social: " + perfil.getNombreObraSocial(),
+	            "Perfil del Doctor",
+	            JOptionPane.INFORMATION_MESSAGE
+	        );
+	    } else {
+	        JOptionPane.showMessageDialog(null, "No se encontró el perfil del doctor.");
+	    }
+	}
+	
+	
+	public void verMisTurnos() {
+	    LinkedList<Turnos> turnos = DtoTurnos.VerTurnosPorDoctor(this.getIdDoctor());
+	    if (turnos.isEmpty()) {
+	        JOptionPane.showMessageDialog(null, "No tenés turnos asignados.");
+	    } else {
+	        StringBuilder sb = new StringBuilder("TUS TURNOS:\n\n");
+	        for (Turnos t : turnos) {
+	            sb.append("ID: ").append(t.getId())
+	              .append(" | Paciente: ").append(t.getApellidoPaciente())
+	              .append(" | Fecha: ").append(t.getFecha())
+	              .append("\n");
+	        }
+	        JOptionPane.showMessageDialog(null, sb.toString());
+	    }
+	}
+	
+	public void atenderPaciente() {
+	    // 1️⃣ Seleccionamos el paciente
+	    LinkedList<Paciente> listaPacientes = Dtopaciente.VerPacientesPorDoctor(this.getIdDoctor());
+	    if (listaPacientes.isEmpty()) {
+	        JOptionPane.showMessageDialog(null, "No tenés pacientes asignados.");
+	        return;
+	    }
+
+	    String[] pacientes = new String[listaPacientes.size()];
+	    for (int i = 0; i < listaPacientes.size(); i++) {
+	        Paciente p = listaPacientes.get(i);
+	        pacientes[i] = "ID: " + p.getId() +
+	                       " | Nombre: " + p.getNombre() +
+	                       " | Apellido: " + p.getApellido();
+	    }
+
+	    int seleccionado = JOptionPane.showOptionDialog(null, "Seleccione un paciente", "Atender Paciente",
+	            0, 0, null, pacientes, pacientes[0]);
+
+
+	    Paciente pacienteSeleccionado = listaPacientes.get(seleccionado);
+
+	    String descripcion = Validaciones.ValidarString("Ingrese la descripción de la historia clínica");
+
+	    String fecha = java.time.LocalDate.now().format(java.time.format.DateTimeFormatter.ofPattern("yyyy/MM/dd"));
+
+	    boolean exito = DtoHistoriaClinica.InsertarHistoriaClinica( descripcion, fecha,this.getIdDoctor(),pacienteSeleccionado.getId()
+	    );
+
+	    if (exito) {
+	        JOptionPane.showMessageDialog(null, "Historia clínica agregada correctamente al paciente.");
+	    } else {
+	        JOptionPane.showMessageDialog(null, "Ocurrió un error al agregar la historia clínica.");
+	    }
+	}
 }

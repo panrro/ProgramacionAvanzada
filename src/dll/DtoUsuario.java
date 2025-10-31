@@ -21,24 +21,44 @@ public class DtoUsuario {
 
   
 	public static Doctor login(String mail, String contrasenia) {	
-		Doctor usuario = null;
+	    Doctor doctor = null;
 	    try {
+	        // Verifico si se encuentra el usuario en la base de datos
 	        PreparedStatement stmt = con.prepareStatement(
 	            "SELECT * FROM usuario WHERE mail = ? AND contrasenia = ?" 
 	        );
 	        stmt.setString(1, mail);
 	        stmt.setString(2, Encriptador.encriptar(contrasenia)); 
-
 	        ResultSet rs = stmt.executeQuery();
 
 	        if (rs.next()) {
-	            int id = rs.getInt("id");
+	            int usuarioId = rs.getInt("id");
 	            String nombre = rs.getString("nombre");
-	            String apellido = rs.getString("apellido"); 
-	            String dni = rs.getString("dni");          
+	            String apellido = rs.getString("apellido");
+	            String dni = rs.getString("dni");
 	            String tipo = rs.getString("tipo");
 
-	            usuario = new Doctor(id, nombre, apellido, mail, contrasenia, dni, tipo);
+	            // Verifico si ese usuario está existe en la tabla doctor
+	            PreparedStatement stmtDoctor = con.prepareStatement(
+	                "SELECT * FROM doctor WHERE usuario_id = ?"
+	            );
+	            stmtDoctor.setInt(1, usuarioId);
+	            ResultSet rsDoctor = stmtDoctor.executeQuery();
+
+	            if (rsDoctor.next()) {
+	                int doctorId = rsDoctor.getInt("id");
+	                int especialidadId = rsDoctor.getInt("especialidad_id");
+	                int obraSocialId = rsDoctor.getInt("obrasocial_id");
+
+	                doctor = new Doctor(doctorId, especialidadId, usuarioId, obraSocialId);
+	                doctor.setNombre(nombre);
+	                doctor.setApellido(apellido);
+	                doctor.setDni(dni);
+	                doctor.setTipo(tipo);
+
+	            } else {
+	                JOptionPane.showMessageDialog(null, "Este usuario no tiene rol de Doctor.");
+	            }
 	        } else {
 	            JOptionPane.showMessageDialog(null, "Mail o contraseña incorrectos.");
 	        }
@@ -47,28 +67,46 @@ public class DtoUsuario {
 	        JOptionPane.showMessageDialog(null, "Error de conexión o consulta: " + e.getMessage());
 	        e.printStackTrace();
 	    }
-	    return usuario;
+	    return doctor;
 	}
+
 
 	public static Recepcionista loginRecepcionista(String mail, String contrasenia) {	
-		Recepcionista usuario = null;
+	    Recepcionista recepcionista = null;
 	    try {
+	        // 1️⃣ Validar usuario base
 	        PreparedStatement stmt = con.prepareStatement(
 	            "SELECT * FROM usuario WHERE mail = ? AND contrasenia = ?" 
 	        );
 	        stmt.setString(1, mail);
 	        stmt.setString(2, Encriptador.encriptar(contrasenia)); 
-
 	        ResultSet rs = stmt.executeQuery();
 
 	        if (rs.next()) {
-	            int id = rs.getInt("id");
+	            int usuarioId = rs.getInt("id");
 	            String nombre = rs.getString("nombre");
-	            String apellido = rs.getString("apellido"); 
-	            String dni = rs.getString("dni");           
+	            String apellido = rs.getString("apellido");
+	            String dni = rs.getString("dni");
 	            String tipo = rs.getString("tipo");
 
-	            usuario = new Recepcionista(id, nombre, apellido, mail, contrasenia, dni, tipo);
+	            // 2️⃣ Verificar si ese usuario está en la tabla recepcionista
+	            PreparedStatement stmtRecep = con.prepareStatement(
+	                "SELECT * FROM recepcionista WHERE usuario_id = ?"
+	            );
+	            stmtRecep.setInt(1, usuarioId);
+	            ResultSet rsRecep = stmtRecep.executeQuery();
+
+	            if (rsRecep.next()) {
+	                int id = rsRecep.getInt("id");
+	                recepcionista = new Recepcionista(id, usuarioId);
+	                recepcionista.setNombre(nombre);
+	                recepcionista.setApellido(apellido);
+	                recepcionista.setDni(dni);
+	                recepcionista.setTipo(tipo);
+
+	            } else {
+	                JOptionPane.showMessageDialog(null, "Este usuario no tiene rol de Recepcionista.");
+	            }
 	        } else {
 	            JOptionPane.showMessageDialog(null, "Mail o contraseña incorrectos.");
 	        }
@@ -77,8 +115,9 @@ public class DtoUsuario {
 	        JOptionPane.showMessageDialog(null, "Error de conexión o consulta: " + e.getMessage());
 	        e.printStackTrace();
 	    }
-	    return usuario;
+	    return recepcionista;
 	}
+
 	
 	public static Usuario buscarPorId() {
 		int id = 0;
