@@ -182,5 +182,19 @@ public class DtoTurnos {
 	    }
 	    return lista;
 	}
+	
+	public static boolean eliminarTurnoPorPaciente(int pacienteId) {
+	    try {
+	        PreparedStatement stmt = con.prepareStatement(
+	            "DELETE FROM turnos WHERE paciente_id = ?"
+	        );
+	        stmt.setInt(1, pacienteId);
+	        int filas = stmt.executeUpdate();
+	        return filas > 0;
+	    } catch (Exception e) {
+	        e.printStackTrace();
+	        return false;
+	    }
+	}
 
 }

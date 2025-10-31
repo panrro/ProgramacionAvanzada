@@ -13,6 +13,7 @@ import com.mysql.jdbc.exceptions.jdbc4.MySQLIntegrityConstraintViolationExceptio
 import bll.Doctor;
 import bll.Especialidad;
 import bll.Usuario;
+import repository.Encriptador;
 
 public class DtoDoctor {
 
@@ -99,10 +100,10 @@ public class DtoDoctor {
             PreparedStatement stmt = con.prepareStatement("""
                 SELECT 
                     d.id AS doctor_id,
-                    u.nombre AS nombre,
-                    u.apellido AS apellido,
-                    e.nombre AS nombre,
-                    o.nombre AS nombre
+                    u.nombre AS nombre_usuario,
+                    u.apellido AS apellido_usuario,
+                    e.nombre AS nombre_especialidad,
+                    o.nombre AS nombre_obrasocial
                 FROM doctor d
                 JOIN usuario u ON d.usuario_id = u.id
                 JOIN especialidad e ON d.especialidad_id = e.id
@@ -115,9 +116,9 @@ public class DtoDoctor {
 
             if (rs.next()) {
                 int id = rs.getInt("doctor_id");
-                String nombreUsuario = rs.getString("nombre") + " " + rs.getString("apellido");
-                String nombreEspecialidad = rs.getString("nombre");
-                String nombreObraSocial = rs.getString("nombre");
+                String nombreUsuario = rs.getString("nombre_usuario") + " " + rs.getString("apellido_usuario");
+                String nombreEspecialidad = rs.getString("nombre_especialidad");
+                String nombreObraSocial = rs.getString("nombre_obrasocial");
 
                 doctor = new Doctor(id, nombreUsuario, nombreEspecialidad, nombreObraSocial);
             }
@@ -127,6 +128,7 @@ public class DtoDoctor {
         }
         return doctor;
     }
+
     
     public static boolean EditarDoctor(Doctor doctor) {
         try {
@@ -152,5 +154,41 @@ public class DtoDoctor {
         }
         return false;
     }
+    
+    public static boolean EditarPerfilDoctor(int idUsuario, int idObraSocial, String mail, String contrasenia) {
+        try {
+            
+
+            PreparedStatement stmtUsuario = con.prepareStatement(
+                "UPDATE usuario SET mail = ?, contrasenia = ? WHERE id = ?"
+            );
+            stmtUsuario.setString(1, mail);
+            stmtUsuario.setString(2, Encriptador.encriptar(contrasenia)); 
+            stmtUsuario.setInt(3, idUsuario);
+            stmtUsuario.executeUpdate();
+
+            PreparedStatement stmtDoctor = con.prepareStatement(
+                "UPDATE doctor SET obrasocial_id = ? WHERE usuario_id = ?"
+            );
+            stmtDoctor.setInt(1, idObraSocial);
+            stmtDoctor.setInt(2, idUsuario);
+
+            int filas = stmtDoctor.executeUpdate();
+            System.out.println("Filas afectadas en doctor: " + filas);
+
+            if (filas > 0) {
+                System.out.println("Perfil actualizado correctamente");
+                return true;
+            }
+
+        } catch (Exception e) {
+            e.printStackTrace();
+            System.out.println("Error al editar el perfil");
+            return false;
+        }
+        return false;
+    }
+
+
     
 }

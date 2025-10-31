@@ -17,6 +17,7 @@ public class HistoriaClinica {
 
 	private String descripcion, fecha;
 	private int doctorId, pacienteId;
+	private String nombreDoctor, especialidad;
 	
 	public HistoriaClinica ( String descripcion, String fecha, int doctorId, int pacienteId) {
 		this.descripcion=descripcion;
@@ -26,15 +27,15 @@ public class HistoriaClinica {
 		
 	}
 	
+	
 
-	public HistoriaClinica ( String descripcion, String fecha ) {
-		this.descripcion=descripcion;
+	public HistoriaClinica(String fecha, String descripcion, String nombreDoctor) {
 		this.fecha=fecha;
-		
-	}
+		this.descripcion=descripcion;
+		this.nombreDoctor = nombreDoctor;
+		}
 
-	
-	
+
 	public String getDescripcion() {
 		return descripcion;
 	}
@@ -81,6 +82,35 @@ public class HistoriaClinica {
 		this.pacienteId = pacienteId;
 	}
 
+
+	public String getNombreDoctor() {
+		return nombreDoctor;
+	}
+
+
+	public void setNombreDoctor(String nombreDoctor) {
+		this.nombreDoctor = nombreDoctor;
+	}
+
+
+	public String getEspecialidad() {
+		return especialidad;
+	}
+
+
+	public void setEspecialidad(String especialidad) {
+		this.especialidad = especialidad;
+	}
+
+
+	@Override
+	public String toString() {
+		return "HistoriaClinica [descripcion=" + descripcion + ", fecha=" + fecha + ", doctorId=" + doctorId
+				+ ", pacienteId=" + pacienteId + ", nombreDoctor=" + nombreDoctor + ", especialidad=" + especialidad
+				+ "]";
+	}
+
+	
 
 
 	

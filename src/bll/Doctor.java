@@ -75,23 +75,21 @@ public class Doctor extends Usuario {
 
             switch (opcionSeleccionada) {
                 case 0:
-                		String[] opcionesDesplegable = {"Atender", "Agregar obraSocial","Editar Perfil", "Ver 						Perfil"};
-                		String elegida = (String) JOptionPane.showInputDialog(null, "Ingrese opcion", "", 0, null, 						opcionesDesplegable,opcionesDesplegable[0]);
+                		String[] opcionesDesplegable = {"Atender","Editar Perfil", "Ver Perfil"};
+                		int elegida = JOptionPane.showOptionDialog(null, "Ingrese una opcion", "", 0, 0, null, opcionesDesplegable, 						opcionesMenu);
                 		
                 		switch (elegida) {
-						case "Atender":
+						case 0:
 							
-							atenderPaciente();
-						       break;
-							
-						case "Agregar obraSocial":
+							atenderPaciente();							
+							verHistoriasClinicas();						     
 							break;
 
-						case "Editar Perfil":
-							
+						case 1:
+							editarPerfil(this.getId());
 							break;
 							
-						case "Ver Perfil":
+						case 2:
 							verMiPerfil();
 							break;
 							
@@ -122,6 +120,26 @@ public class Doctor extends Usuario {
         } while (opcionSeleccionada != 2);
     }
 	
+	public static void mostrarHistorias(int idPaciente, String nombrePaciente) {
+	    LinkedList<HistoriaClinica> historias = DtoHistoriaClinica.VerHistorias(idPaciente);
+
+	    if (historias.isEmpty()) {
+	        JOptionPane.showMessageDialog(null, "El paciente no tiene historias clínicas registradas.");
+	        return;
+	    }
+	    StringBuilder sb = new StringBuilder("📋 HISTORIAS CLÍNICAS DE " + nombrePaciente + ":\n\n");
+
+	    for (HistoriaClinica h : historias) {
+	        sb.append("Fecha: ").append(h.getFecha()).append("\n")
+	          .append("Descripción: ").append(h.getDescripcion()).append("\n")
+	          .append("Doctor: ").append(h.getNombreDoctor()).append("\n")
+	          .append("-----------------------------\n");
+	    }
+
+	    JOptionPane.showMessageDialog(null, sb.toString());
+	}
+
+	
 	public void verMiPerfil() {
 	    Doctor perfil = DtoDoctor.VerPerfilDoctor(this.getIdDoctor());
 	    if (perfil != null) {
@@ -136,6 +154,25 @@ public class Doctor extends Usuario {
 	    } else {
 	        JOptionPane.showMessageDialog(null, "No se encontró el perfil del doctor.");
 	    }
+	}
+	
+	public static void editarPerfil(int idUsuario) {
+	    LinkedList<ObraSocial> listaObraSocial = DtoObraSocial.mostrarObraSociales();
+	    String[] obrasSociales = new String[listaObraSocial.size()];
+	    for (int i = 0; i < obrasSociales.length; i++) {
+	        obrasSociales[i] = listaObraSocial.get(i).getNombre();
+	    }
+
+	    int seleccion = JOptionPane.showOptionDialog(
+	        null, "Seleccione una obra social", "Editar perfil",
+	        0, 0, null, obrasSociales, obrasSociales[0]
+	    );
+
+	    int idObraSocialElegida = listaObraSocial.get(seleccion).getId();
+
+	    String nuevoMail = Validaciones.ValidarString("Ingrese nuevo mail:");
+	    String nuevaContrasenia = Validaciones.ValidarString("Ingrese nueva contraseña:");
+	    DtoDoctor.EditarPerfilDoctor(idUsuario, idObraSocialElegida, nuevoMail, nuevaContrasenia);
 	}
 	
 	
@@ -185,9 +222,56 @@ public class Doctor extends Usuario {
 	    );
 
 	    if (exito) {
-	        JOptionPane.showMessageDialog(null, "Historia clínica agregada correctamente al paciente.");
+	        // 🆕 borrar turno del paciente atendido
+	        boolean turnoEliminado = DtoTurnos.eliminarTurnoPorPaciente(pacienteSeleccionado.getId());
+
+	        if (turnoEliminado) {
+	            JOptionPane.showMessageDialog(null, "Historia clínica agregada y turno eliminado correctamente.");
+	        } else {
+	            JOptionPane.showMessageDialog(null, "Historia clínica agregada, pero no se encontró un turno para eliminar.");
+	        }
 	    } else {
 	        JOptionPane.showMessageDialog(null, "Ocurrió un error al agregar la historia clínica.");
 	    }
+	    
+	    
 	}
+	
+	public void verHistoriasClinicas() {
+	    LinkedList<Paciente> listaPacientes = Dtopaciente.VerPacientesPorDoctor(this.getIdDoctor());
+
+	    if (listaPacientes.isEmpty()) {
+	        JOptionPane.showMessageDialog(null, "No tenés pacientes asignados.");
+	        return;
+	    }
+
+	    String[] pacientes = new String[listaPacientes.size()];
+	    for (int i = 0; i < listaPacientes.size(); i++) {
+	        Paciente p = listaPacientes.get(i);
+	        pacientes[i] = p.getNombre() + " " + p.getApellido() + " (ID: " + p.getId() + ")";
+	    }
+
+	    int seleccionado = JOptionPane.showOptionDialog( null,"Seleccione un paciente para ver sus historias clínicas:","Historias 		Clínicas", 0,0,null,pacientes,pacientes[0]);
+
+	  	    Paciente pacienteSeleccionado = listaPacientes.get(seleccionado);
+
+	  	    LinkedList<HistoriaClinica> historias = DtoHistoriaClinica.VerHistorias(pacienteSeleccionado.getId());
+
+	    if (historias.isEmpty()) {
+	        JOptionPane.showMessageDialog(null, "El paciente no tiene historias clínicas registradas.");
+	        return;
+	    }
+
+	    StringBuilder sb = new StringBuilder("📋 HISTORIAS CLÍNICAS DE ");
+	    sb.append(pacienteSeleccionado.getNombre()).append(" ").append(pacienteSeleccionado.getApellido()).append(":\n\n");
+
+	    for (HistoriaClinica h : historias) {
+	        sb.append("Fecha: ").append(h.getFecha()).append("\n");
+	        sb.append("Descripción: ").append(h.getDescripcion()).append("\n");
+	        sb.append("-----------------------------\n");
+	    }
+
+	    JOptionPane.showMessageDialog(null, sb.toString());
+	}
+
 }

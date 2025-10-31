@@ -55,6 +55,7 @@ public class Paciente {
 		this.doctor_id=doctor_id;
 	}
 
+
 	public int getId() {
 		return id;
 	}
